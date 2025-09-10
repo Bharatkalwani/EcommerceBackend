@@ -11,6 +11,7 @@ app.use("/api/users", userRoutes);
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+console.log("addded");
 
 // Test DB connection
 sequelize.authenticate()
