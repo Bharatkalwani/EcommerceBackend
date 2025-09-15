@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import sequelize from "./config/database";
 import authRoutes from "./routes/userRoutes";
 import productRoutes from "./routes/productRoutes";
@@ -8,6 +9,12 @@ const app = express();
 
 app.use(express.json())
 app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:3000", // <-- your frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  credentials: true, // if you want to send cookies
+}))
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
