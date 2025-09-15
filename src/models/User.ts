@@ -1,33 +1,31 @@
-import {DataTypes,Model,Optional} from 'sequelize'
-import sequelize from '../config/database'
-import { DefaultDeserializer } from 'v8'
+import { DataTypes, Model } from "sequelize";
+import sequelize from "../config/database";
+import bcrypt from "bcrypt";
 
-interface UserAttributes {
-    id:number
-    name:string
-    email:string
-    password:string
-
-}
-interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
-
-class User extends Model<UserAttributes,UserCreationAttributes>
-  implements UserAttributes {
+class User extends Model {
   public id!: number;
   public name!: string;
   public email!: string;
   public password!: string;
+
+  async validPassword(password: string) {
+    return bcrypt.compare(password, this.password);
+  }
 }
 
-
 User.init(
-    {
+  {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
-    email: { type: DataTypes.STRING, unique: true, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false }
+    email: { type: DataTypes.STRING, allowNull: false, unique: true },
+    password: { type: DataTypes.STRING, allowNull: false },
   },
   { sequelize, tableName: "users" }
-)
+);
+
+// hash password before save
+User.beforeCreate(async (user: any) => {
+  user.password = await bcrypt.hash(user.password, 10);
+});
 
 export default User;
