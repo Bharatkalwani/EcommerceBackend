@@ -25,7 +25,6 @@ export const protect = async (
         if (!token) {
             return res.status(401).json({ message: "Invalid token format" });
         }
-        console.log("token")
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET as string
@@ -36,13 +35,11 @@ export const protect = async (
         }
 
         const user = await User.findByPk(decoded.id);
-             console.log("mid started2",user)
         if (!user) return res.status(401).json({ message: "Invalid token" });
 
         req.user = user;
         next();
     } catch (error) {
-        console.log(error)
         res.status(401).json({ message: "Invalid token" });
     }
 };
