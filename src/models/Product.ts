@@ -14,6 +14,7 @@ Product.init(
     name: { type: DataTypes.STRING, allowNull: false },
     productUrl: { type: DataTypes.STRING, allowNull: false },
     price: { type: DataTypes.FLOAT, allowNull: false },
+    stock: { type: DataTypes.INTEGER, allowNull: true },
     description: { type: DataTypes.STRING, allowNull: true },
   },
   { sequelize, tableName: "products" }
